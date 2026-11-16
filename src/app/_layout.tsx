@@ -2,10 +2,11 @@ import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 
 import { theme } from '@/theme/theme';
+import { ExpenseProvider } from '@/storage/expense-context';
 
 export default function RootLayout() {
   return (
-    <>
+    <ExpenseProvider>
       <StatusBar style="dark" />
       <Stack
         screenOptions={{
@@ -16,6 +17,6 @@ export default function RootLayout() {
           contentStyle: { backgroundColor: theme.colors.background },
         }}
       />
-    </>
+    </ExpenseProvider>
   );
 }
