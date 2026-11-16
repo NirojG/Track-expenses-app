@@ -1,0 +1,12 @@
+{
+  "expo": {
+    "name": "Track Expenses",
+    "slug": "track-expenses-app",
+    "version": "0.1.0",
+    "scheme": "trackexpenses",
+    "userInterfaceStyle": "light",
+    "web": { "output": "static" },
+    "plugins": ["expo-router"],
+    "experiments": { "typedRoutes": true }
+  }
+}
