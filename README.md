@@ -27,8 +27,17 @@ committed and pushed there; merging into `main` requires approval.
 
 ## Status
 
-Foundation in progress. Expense storage, parsing, receipt scanning, and voice
+The foundation includes a blue-and-white home screen, three recording preview
+routes, and an empty expense history screen. All recording actions are clearly
+marked as previews. Expense storage, parsing, receipt scanning, and voice
 recording are not implemented yet. No paid services or backend are required.
+
+Shared screen spacing lives in `src/components/screen.tsx`, design tokens in
+`src/theme/theme.ts`, and route screens in `src/app/`. See
+[architecture](docs/architecture.md) for the planned data boundaries and
+[verification notes](docs/verification.md) for checks and known limitations.
+
+The next milestone is SQLite storage and a dashboard driven by real expenses.
 
 The project was initialized from Expo's default template. Its MIT license and
 copyright notice are retained in `LICENSE`.
