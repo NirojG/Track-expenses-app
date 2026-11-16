@@ -29,6 +29,7 @@ export default function HistoryScreen() {
           <Text style={ui.heading}>{expense.description}</Text>
           <Text style={ui.body}>{formatMoney(expense.amountCents, expense.currency)} · {expense.date} · {expense.category}</Text>
           {expense.merchant ? <Text style={ui.body}>{expense.merchant}</Text> : null}
+          <RouteLink href={{ pathname: '/expense/edit', params: { id: expense.id } }} label="Edit expense" />
         </Card>
       ))}
       <RouteLink href="/record/type" label="Type expense" />
