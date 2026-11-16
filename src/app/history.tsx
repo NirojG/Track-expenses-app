@@ -1,30 +1,37 @@
+import { useState } from 'react';
 import { Stack } from 'expo-router';
-import { StyleSheet, Text, View } from 'react-native';
-
-import { RouteLink } from '@/components/route-link';
+import { Text } from 'react-native';
 import { Screen } from '@/components/screen';
-import { theme } from '@/theme/theme';
+import { SaveNotice } from '@/components/save-notice';
+import { RouteLink } from '@/components/route-link';
+import { Card, Choices, Field, ui } from '@/components/ui';
+import { categories, formatMoney } from '@/features/expenses/model';
+import { searchExpenses } from '@/features/expenses/summary';
+import { useExpenses } from '@/storage/expense-context';
+
+const filters = ['All', ...categories] as const;
 
 export default function HistoryScreen() {
+  const { expenses } = useExpenses();
+  const [query, setQuery] = useState('');
+  const [category, setCategory] = useState<(typeof filters)[number]>('All');
+  const results = searchExpenses(expenses, query, category);
+
   return (
     <Screen>
       <Stack.Screen options={{ title: 'Expense history' }} />
-      <Text accessibilityRole="header" style={styles.title}>Your everyday, in one place.</Text>
-      <View style={styles.card}>
-        <Text style={styles.heading}>No expenses yet</Text>
-        <Text style={styles.body}>
-          Your purchases will appear here once expense recording is available.
-          This preview does not store transactions.
-        </Text>
-      </View>
-      <RouteLink href="/" label="Back to home" replace />
+      <SaveNotice />
+      <Field label="Search expenses" placeholder="Description, merchant, or amount" value={query} onChangeText={setQuery} />
+      <Choices label="Category" values={filters} value={category} onChange={setCategory} />
+      {results.length === 0 ? <Text style={ui.body}>{expenses.length ? 'No matching expenses.' : 'No expenses yet.'}</Text> : null}
+      {results.map((expense) => (
+        <Card key={expense.id}>
+          <Text style={ui.heading}>{expense.description}</Text>
+          <Text style={ui.body}>{formatMoney(expense.amountCents, expense.currency)} · {expense.date} · {expense.category}</Text>
+          {expense.merchant ? <Text style={ui.body}>{expense.merchant}</Text> : null}
+        </Card>
+      ))}
+      <RouteLink href="/record/type" label="Type expense" />
     </Screen>
   );
 }
-
-const styles = StyleSheet.create({
-  title: { fontSize: 30, fontWeight: '700', color: theme.colors.text },
-  card: { backgroundColor: theme.colors.surface, padding: 24, borderRadius: theme.radius.md, gap: 12 },
-  heading: { fontSize: 20, fontWeight: '600', color: theme.colors.text },
-  body: { fontSize: 16, lineHeight: 25, color: theme.colors.muted },
-});
